@@ -1,12 +1,15 @@
 package org.iesalixar.foroGamesHelper.model;
 
 import java.io.Serializable;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -37,6 +40,9 @@ public class Usuario implements Serializable {
     
     @Column(nullable=false,columnDefinition="BOOLEAN")  
     private boolean activo;
+    
+    @OneToMany(mappedBy="usuario",cascade=CascadeType.ALL, orphanRemoval=true)
+    private Set<Post> posts; 
     
     public Usuario() {
         // TODO Auto-generated constructor stub
@@ -105,6 +111,16 @@ public class Usuario implements Serializable {
     public void setActivo(boolean activo) {
         this.activo = activo;
     }
+
+	public Set<Post> getPosts() {
+		return posts;
+	}
+
+	public void addPost(Post post) {
+		this.posts.add(post);
+		post.setUsuario(this);
+		this.posts = posts;
+	}
     
 
 }
