@@ -4,7 +4,7 @@ import org.iesalixar.foroGamesHelper.dto.PostDTO;
 import org.iesalixar.foroGamesHelper.dto.UsuarioDTO;
 import org.iesalixar.foroGamesHelper.model.Post;
 import org.iesalixar.foroGamesHelper.services.PostServiceImpl;
-import org.iesalixar.foroGamesHelper.services.UsuarioServiceImpl;
+import org.iesalixar.foroGamesHelper.services.implement.UsuarioServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +26,9 @@ public class PostController {
 	public ResponseEntity<?> addPost(PostDTO post, UsuarioDTO usuario){
 		Post postBD = new Post();
 		
-		postBD.setTitulo(post.getTitulo());
-		postBD.setDescripcion(post.getDescripcion());
-		postBD.setUsuario(userService.getUsuario(usuario.getUsuario()));
+//		postBD.setTitulo(post.getTitulo());
+//		postBD.setDescripcion(post.getDescripcion());
+//		postBD.setUsuario(userService.getUsuario(usuario.getUsuario()));
 		
 		return new ResponseEntity(postBD, HttpStatus.OK);
 		

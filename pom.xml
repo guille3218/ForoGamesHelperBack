@@ -6,7 +6,7 @@
 		<version>2.6.4</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-  <groupId>iesalixar.proyectodaw</groupId>
+  <groupId>org.iesalixar.foroGamesHelper</groupId>
   <artifactId>ForoGamesHelper</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>ForoGamesHelper</name>

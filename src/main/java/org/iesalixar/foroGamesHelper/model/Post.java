@@ -1,91 +1,259 @@
 package org.iesalixar.foroGamesHelper.model;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.time.LocalDate;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+/**
+ * The Class Post.
+ */
 @Entity
-@Table(name="posts")
-public class Post implements Serializable{
-	@Id
+@Table(name = "posts")
+public class Post implements Serializable {
+
+    /** serial. */
+    private static final long serialVersionUID = 1L;
+
+    /** The id. */
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idposts;
-	
-	@Column(nullable=false)
-	private String titulo;
-	
-	@Column(nullable=false)
-	private String descripcion;
-	
-	@Column(nullable=false)
-	@CreationTimestamp
-	private Date fechaCreacion;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="id_usuario")
-	private Usuario usuario;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="id_juego")
-	private Juego juego;
-	
-	public Post() {
-		// TODO Auto-generated constructor stub
-	}
+    private Long id;
 
-	public Long getIdposts() {
-		return idposts;
-	}
+    /** The titulo. */
+    @Column(nullable = false)
+    private String titulo;
 
-	public void setIdposts(Long idposts) {
-		this.idposts = idposts;
-	}
+    /** The contenido. */
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String contenido;
 
-	public String getTitulo() {
-		return titulo;
-	}
+    /** The fecha creacion. */
+    @Column(nullable = false, name = "fecha_creacion")
+    @CreationTimestamp
+    private LocalDate fechaCreacion;
 
-	public void setTitulo(String titulo) {
-		this.titulo = titulo;
-	}
+    /** The usuario. */
+    @ManyToOne
+    @JoinColumn(name = "usuarios_id")
+    private Usuario usuario;
 
-	public String getDescripcion() {
-		return descripcion;
-	}
+    /** The juego. */
+    @ManyToOne
+    @JoinColumn(name = "juegos_id", nullable = false)
+    private Juego juego;
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
+    /** The comentarios. */
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Comentario> comentarios;
 
-	public Date getFechaCreacion() {
-		return fechaCreacion;
-	}
+    /**
+     * Instantiates a new post.
+     */
+    public Post() {
+    }
 
-	public void setFechaCreacion(Date fechaCreacion) {
-		this.fechaCreacion = fechaCreacion;
-	}
+    /**
+     * Instantiates a new post.
+     *
+     * @param id
+     *            the id
+     * @param titulo
+     *            the titulo
+     * @param contenido
+     *            the contenido
+     * @param fechaCreacion
+     *            the fecha creacion
+     * @param usuario
+     *            the usuario
+     * @param juego
+     *            the juego
+     * @param comentarios
+     *            the comentarios
+     */
+    public Post(
+        Long id,
+        String titulo,
+        String contenido,
+        LocalDate fechaCreacion,
+        Usuario usuario,
+        Juego juego,
+        Set<Comentario> comentarios) {
+        this.id = id;
+        this.titulo = titulo;
+        this.contenido = contenido;
+        this.fechaCreacion = fechaCreacion;
+        this.usuario = usuario;
+        this.juego = juego;
+        this.comentarios = comentarios;
+    }
+    // HELPERS
 
-	public Usuario getUsuario() {
-		return usuario;
-	}
+    /**
+     * Hacer comentario.
+     *
+     * @param comentario
+     *            the comentario
+     */
+    public void hacerComentario(Comentario comentario) {
+        // El usuario tiene que estar en comentario
+        this.comentarios.add(comentario);
+        comentario.setPost(this);
+    }
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
+    /**
+     * Eliminar comentario.
+     *
+     * @param comentario
+     *            the comentario
+     */
+    public void eliminarComentario(Comentario comentario) {
+        this.comentarios.remove(comentario);
+        comentario.setPost(null);
+    }
 
-	
-	
-	
+    /**
+     * Gets the id.
+     *
+     * @return the id
+     */
+    public Long getId() {
+        return id;
+    }
 
+    /**
+     * Sets the id.
+     *
+     * @param id
+     *            the new id
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    /**
+     * Gets the titulo.
+     *
+     * @return the titulo
+     */
+    public String getTitulo() {
+        return titulo;
+    }
+
+    /**
+     * Sets the titulo.
+     *
+     * @param titulo
+     *            the new titulo
+     */
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    /**
+     * Gets the contenido.
+     *
+     * @return the contenido
+     */
+    public String getContenido() {
+        return contenido;
+    }
+
+    /**
+     * Sets the contenido.
+     *
+     * @param contenido
+     *            the new contenido
+     */
+    public void setContenido(String contenido) {
+        this.contenido = contenido;
+    }
+
+    /**
+     * Gets the fecha creacion.
+     *
+     * @return the fecha creacion
+     */
+    public LocalDate getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    /**
+     * Sets the fecha creacion.
+     *
+     * @param fechaCreacion
+     *            the new fecha creacion
+     */
+    public void setFechaCreacion(LocalDate fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    /**
+     * Gets the usuario.
+     *
+     * @return the usuario
+     */
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    /**
+     * Sets the usuario.
+     *
+     * @param usuario
+     *            the new usuario
+     */
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    /**
+     * Gets the juego.
+     *
+     * @return the juego
+     */
+    public Juego getJuego() {
+        return juego;
+    }
+
+    /**
+     * Sets the juego.
+     *
+     * @param juego
+     *            the new juego
+     */
+    public void setJuego(Juego juego) {
+        this.juego = juego;
+    }
+
+    /**
+     * Gets the comentarios.
+     *
+     * @return the comentarios
+     */
+    public Set<Comentario> getComentarios() {
+        return comentarios;
+    }
+
+    /**
+     * Sets the comentarios.
+     *
+     * @param comentarios
+     *            the new comentarios
+     */
+    public void setComentarios(Set<Comentario> comentarios) {
+        this.comentarios = comentarios;
+    }
 }
