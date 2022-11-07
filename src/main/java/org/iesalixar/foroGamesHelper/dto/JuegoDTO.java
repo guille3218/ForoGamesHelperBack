@@ -2,20 +2,13 @@ package org.iesalixar.foroGamesHelper.dto;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-
-import org.iesalixar.foroGamesHelper.model.Comentario;
-import org.iesalixar.foroGamesHelper.model.Post;
 
 /**
  * The Class JuegoDTO.
  */
 public class JuegoDTO implements Serializable {
 
-    /** serial */
+    /** serial. */
     private static final long serialVersionUID = 1L;
 
     /** The id. */
@@ -36,12 +29,6 @@ public class JuegoDTO implements Serializable {
     /** The anio salida. */
     private LocalDate anioSalida;
 
-    /** The posts. */
-    private List<Post> posts;
-
-    /** The comentarios. */
-    private List<Comentario> comentarios;
-
     /**
      * Instantiates a new juego DTO.
      */
@@ -51,8 +38,6 @@ public class JuegoDTO implements Serializable {
     /**
      * Instantiates a new juego DTO.
      *
-     * @param id
-     *            the id
      * @param nombre
      *            the nombre
      * @param compania
@@ -75,89 +60,119 @@ public class JuegoDTO implements Serializable {
         this.genero = genero;
         this.coop = coop;
         this.anioSalida = anioSalida;
-        this.posts = new ArrayList<>();
-        this.comentarios = new ArrayList<>();
     }
 
-    
+    /**
+     * Gets the id.
+     *
+     * @return the id
+     */
     public Long getId() {
         return id;
     }
 
-    
+    /**
+     * Sets the id.
+     *
+     * @param id
+     *            the new id
+     */
     public void setId(Long id) {
         this.id = id;
     }
 
-    
+    /**
+     * Gets the nombre.
+     *
+     * @return the nombre
+     */
     public String getNombre() {
         return nombre;
     }
 
-    
+    /**
+     * Sets the nombre.
+     *
+     * @param nombre
+     *            the new nombre
+     */
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
-    
+    /**
+     * Gets the compania.
+     *
+     * @return the compania
+     */
     public String getCompania() {
         return compania;
     }
 
-    
+    /**
+     * Sets the compania.
+     *
+     * @param compania
+     *            the new compania
+     */
     public void setCompania(String compania) {
         this.compania = compania;
     }
 
-    
+    /**
+     * Gets the genero.
+     *
+     * @return the genero
+     */
     public String getGenero() {
         return genero;
     }
 
-    
+    /**
+     * Sets the genero.
+     *
+     * @param genero
+     *            the new genero
+     */
     public void setGenero(String genero) {
         this.genero = genero;
     }
 
-    
+    /**
+     * Checks if is coop.
+     *
+     * @return true, if is coop
+     */
     public boolean isCoop() {
         return coop;
     }
 
-    
+    /**
+     * Sets the coop.
+     *
+     * @param coop
+     *            the new coop
+     */
     public void setCoop(boolean coop) {
         this.coop = coop;
     }
 
-    
+    /**
+     * Gets the anio salida.
+     *
+     * @return the anio salida
+     */
     public LocalDate getAnioSalida() {
         return anioSalida;
     }
 
-    
+    /**
+     * Sets the anio salida.
+     *
+     * @param anioSalida
+     *            the new anio salida
+     */
     public void setAnioSalida(LocalDate anioSalida) {
         this.anioSalida = anioSalida;
     }
-
-    
-    public List<Post> getPosts() {
-        return posts;
-    }
-
-    
-    public void setPosts(Set<Post> posts) {
-        this.posts = new ArrayList<>(posts);
-    }
-
-    
-    public List<Comentario> getComentarios() {
-        return comentarios;
-    }
-
-    
-    public void setComentarios(Set<Comentario> comentarios) {
-        this.comentarios = new ArrayList<>(comentarios);
-    }
-    
-    
 }

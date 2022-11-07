@@ -171,22 +171,22 @@ public class Usuario implements Serializable {
     }
 
     /**
-     * Gets the user name.
+     * Gets the usuario.
      *
-     * @return the user name
+     * @return the usuario
      */
-    public String getUserName() {
+    public String getUsuario() {
         return usuario;
     }
 
     /**
-     * Sets the user name.
+     * Sets the usuario.
      *
-     * @param userName
-     *            the new user name
+     * @param usuario
+     *            the new usuario
      */
-    public void setUserName(String userName) {
-        this.usuario = userName;
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
     /**

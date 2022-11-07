@@ -30,7 +30,7 @@ public class UserController {
 		userBD.setRole(RolEnum.USER.name());
 		userBD.setNombre(usuario.getNombre());
 		userBD.setApellidos(usuario.getApellidos());
-		userBD.setUserName(usuario.getUsuario());
+		userBD.setUsuario(usuario.getUsuario());
 		userBD.setEmail(usuario.getEmail());
 		userBD.setPassword(new BCryptPasswordEncoder(15).encode(usuario.getPassword()));
 

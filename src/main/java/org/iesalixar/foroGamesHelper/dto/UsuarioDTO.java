@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.iesalixar.foroGamesHelper.model.Comentario;
+import org.iesalixar.foroGamesHelper.model.ComentarioDTO;
 import org.iesalixar.foroGamesHelper.model.Post;
 
 /**
@@ -47,7 +47,7 @@ public class UsuarioDTO implements Serializable {
     private List<Post> posts;
 
     /** The comentarios. */
-    private List<Comentario> comentarios;
+    private List<ComentarioDTO> comentarios;
 
     /**
      * Instantiates a new usuario DTO.
@@ -291,7 +291,7 @@ public class UsuarioDTO implements Serializable {
      *
      * @return the comentarios
      */
-    public List<Comentario> getComentarios() {
+    public List<ComentarioDTO> getComentarios() {
         return comentarios;
     }
 
@@ -301,7 +301,7 @@ public class UsuarioDTO implements Serializable {
      * @param comentarios
      *            the new comentarios
      */
-    public void setComentarios(List<Comentario> comentarios) {
+    public void setComentarios(List<ComentarioDTO> comentarios) {
         this.comentarios = comentarios;
     }
 }
