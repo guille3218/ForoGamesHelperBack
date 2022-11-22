@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 
 import org.iesalixar.foroGamesHelper.constant.RolEnum;
 import org.iesalixar.foroGamesHelper.dto.PostDTO;
+import org.iesalixar.foroGamesHelper.dto.PostInfo;
+import org.iesalixar.foroGamesHelper.mapper.GameMapper;
 import org.iesalixar.foroGamesHelper.model.Juego;
 import org.iesalixar.foroGamesHelper.model.Post;
 import org.iesalixar.foroGamesHelper.model.Usuario;
@@ -24,25 +26,34 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * The Class PostController.
+ */
 @RestController
 @CrossOrigin(origins = "*")
 public class PostController {
 
-	@Autowired
-	PostServiceImpl postService;
-	
-	@Autowired
-	JuegoServiceImpl juegoService;
-	
-	@Autowired
-	UsuarioServiceImpl userService;
-	
+    /** The post service. */
+    @Autowired
+    PostServiceImpl postService;
+
+    /** The juego service. */
+    @Autowired
+    JuegoServiceImpl juegoService;
+
+    /** The user service. */
+    @Autowired
+    UsuarioServiceImpl userService;
+
     /**
      * Adds the post.
      *
-     * @param post the post
-     * @param usuario the usuario
-     * @param idJuego the id juego
+     * @param post
+     *            the post
+     * @param usuario
+     *            the usuario
+     * @param idJuego
+     *            the id juego
      * @return the response entity
      */
     @PostMapping("/Post")
@@ -55,9 +66,11 @@ public class PostController {
         if (juego != null) {
             postBD.setJuego(juego);
             Usuario user = userService.getUsuario(usuario);
-            if(user != null) {
+            if (user != null) {
                 user.realizarPost(postBD);
-                return new ResponseEntity<String>("No ha iniciado sesion. Inicia Sesion para hacer un post sobre el juego '" +juego.getNombre()+"'",
+                return new ResponseEntity<String>(
+                    "No ha iniciado sesion. Inicia Sesion para hacer un post sobre el juego '"
+                        + juego.getNombre() + "'",
                     HttpStatus.INTERNAL_SERVER_ERROR);
             }
             return new ResponseEntity<String>(
@@ -68,12 +81,14 @@ public class PostController {
                 HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
+
     /**
      * Delete post.
      *
-     * @param idPost the id post
-     * @param usuario the usuario
+     * @param idPost
+     *            the id post
+     * @param usuario
+     *            the usuario
      * @return the response entity
      */
     @SuppressWarnings("unused")
@@ -101,7 +116,16 @@ public class PostController {
                 HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
+
+    /**
+     * Update post.
+     *
+     * @param postModified
+     *            the post modified
+     * @param usuario
+     *            the usuario
+     * @return the response entity
+     */
     @PatchMapping("/Post")
     public ResponseEntity<?> updatePost(PostDTO postModified, String usuario) {
         Post post = postService.getPost(postModified.getId());
@@ -121,20 +145,42 @@ public class PostController {
                 HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
+
+    /**
+     * Gets the all posts.
+     *
+     * @param idJuego
+     *            the id juego
+     * @return the all posts
+     */
     @GetMapping("/AllPost")
-    public ResponseEntity<?> getAllPosts(Long idJuego){
+    public ResponseEntity<?> getAllPosts(Long idJuego) {
         List<Post> listaPost = postService.getAllPosts();
-        List<PostDTO> listaReturn = new ArrayList<>();
-        if(idJuego == null) {
-            listaPost = listaPost.stream().sorted(Comparator.comparing(Post::getFechaCreacion)).collect(Collectors.toList());            
-        }else {
+        if (idJuego == null) {
+            listaPost = listaPost.stream().sorted(Comparator.comparing(Post::getFechaCreacion))
+                .collect(Collectors.toList());
+        } else {
             Juego juego = juegoService.getJuego(idJuego);
-            return new ResponseEntity<List<PostDTO>>(listaReturn, HttpStatus.OK);
+            listaPost = new ArrayList<Post>(juego.getPosts());
         }
-        return new ResponseEntity<List<PostDTO>>(listaReturn, HttpStatus.OK);
+        return new ResponseEntity<List<PostInfo>>(GameMapper.mapToListPostInfo(listaPost), HttpStatus.OK);
     }
-    
-    
-    
+
+    /**
+     * Gets the post.
+     *
+     * @param idPost
+     *            the id post
+     * @return the post
+     */
+    @GetMapping("/Post")
+    public ResponseEntity<?> getPost(Long idPost) {
+        if (idPost != null) {
+            Post post = postService.getPost(idPost);
+            return new ResponseEntity<PostInfo>(GameMapper.mapToPostInfo(post), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<String>("El post seleccinado no se encuentra en el sistema",
+                HttpStatus.OK);
+        }
+    }
 }

@@ -1,18 +1,12 @@
 package org.iesalixar.foroGamesHelper.dto;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
+// TODO: Auto-generated Javadoc
 /**
- * The Class PostDTO.
+ * The Class PostInfo.
  */
-public class PostDTO implements Serializable {
-
-    /** serial. */
-    private static final long serialVersionUID = 1L;
+public class PostInfo {
 
     /** The id. */
     private Long id;
@@ -20,78 +14,55 @@ public class PostDTO implements Serializable {
     /** The titulo. */
     private String titulo;
 
-    /** The contenido. */
-    private String contenido;
+    /** The contenido reducido. */
+    private String contenidoReducido;
 
     /** The fecha creacion. */
-    private LocalDate fechaCreacion;
+    private String fechaCreacion;
 
     /** The usuario. */
     private String usuario;
 
     /** The juego. */
-    private Long juego;
+    private String juego;
 
-    /** The comentarios. */
-    private List<ComentarioDTO> comentarios;
-
-    /**
-     * Instantiates a new post DTO.
-     */
-    public PostDTO() {
-    }
+    /** The num comentarios. */
+    private int numComentarios;
 
     /**
-     * Instantiates a new post DTO.
+     * Instantiates a new post info.
      *
      * @param id
      *            the id
      * @param titulo
      *            the titulo
-     * @param contenido
-     *            the contenido
+     * @param contenidoReducido
+     *            the contenido reducido
      * @param fechaCreacion
      *            the fecha creacion
      * @param usuario
      *            the usuario
      * @param juego
      *            the juego
+     * @param numComentarios
+     *            the num comentarios
      */
-    public PostDTO(
+    public PostInfo(
         Long id,
         String titulo,
-        String contenido,
-        LocalDate fechaCreacion,
+        String contenidoReducido,
+        String fechaCreacion,
         String usuario,
-        Long juego,
-        List<ComentarioDTO> comentariosDTO) {
+        String juego,
+        int numComentarios) {
         super();
         this.id = id;
         this.titulo = titulo;
-        this.contenido = contenido;
+        this.contenidoReducido = contenidoReducido;
         this.fechaCreacion = fechaCreacion;
         this.usuario = usuario;
         this.juego = juego;
-        this.comentarios = comentariosDTO;
-    }
-
-    /**
-     * Gets the comentarios.
-     *
-     * @return the comentarios
-     */
-    public List<ComentarioDTO> getComentarios() {
-        return comentarios;
-    }
-
-    /**
-     * Sets the comentarios.
-     *
-     * @param comentarios
-     *            the new comentarios
-     */
-    public void setComentarios(List<ComentarioDTO> comentarios) {
-        this.comentarios = comentarios;
+        this.numComentarios = numComentarios;
     }
 
     /**
@@ -133,22 +104,22 @@ public class PostDTO implements Serializable {
     }
 
     /**
-     * Gets the contenido.
+     * Gets the contenido reducido.
      *
-     * @return the contenido
+     * @return the contenido reducido
      */
-    public String getContenido() {
-        return contenido;
+    public String getContenidoReducido() {
+        return contenidoReducido;
     }
 
     /**
-     * Sets the contenido.
+     * Sets the contenido reducido.
      *
-     * @param contenido
-     *            the new contenido
+     * @param contenidoReducido
+     *            the new contenido reducido
      */
-    public void setContenido(String contenido) {
-        this.contenido = contenido;
+    public void setContenidoReducido(String contenidoReducido) {
+        this.contenidoReducido = contenidoReducido;
     }
 
     /**
@@ -156,7 +127,7 @@ public class PostDTO implements Serializable {
      *
      * @return the fecha creacion
      */
-    public LocalDate getFechaCreacion() {
+    public String getFechaCreacion() {
         return fechaCreacion;
     }
 
@@ -166,7 +137,7 @@ public class PostDTO implements Serializable {
      * @param fechaCreacion
      *            the new fecha creacion
      */
-    public void setFechaCreacion(LocalDate fechaCreacion) {
+    public void setFechaCreacion(String fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 
@@ -194,7 +165,7 @@ public class PostDTO implements Serializable {
      *
      * @return the juego
      */
-    public Long getJuego() {
+    public String getJuego() {
         return juego;
     }
 
@@ -204,8 +175,27 @@ public class PostDTO implements Serializable {
      * @param juego
      *            the new juego
      */
-    public void setJuego(Long juego) {
+    public void setJuego(String juego) {
         this.juego = juego;
+    }
+
+    /**
+     * Gets the num comentarios.
+     *
+     * @return the num comentarios
+     */
+    public int getNumComentarios() {
+        return numComentarios;
+    }
+
+    /**
+     * Sets the num comentarios.
+     *
+     * @param numComentarios
+     *            the new num comentarios
+     */
+    public void setNumComentarios(int numComentarios) {
+        this.numComentarios = numComentarios;
     }
 
     /**
@@ -215,7 +205,7 @@ public class PostDTO implements Serializable {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(id, juego, usuario);
+        return Objects.hash(id);
     }
 
     /**
@@ -233,8 +223,7 @@ public class PostDTO implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        PostDTO other = (PostDTO) obj;
-        return Objects.equals(id, other.id) && Objects.equals(juego, other.juego)
-            && Objects.equals(usuario, other.usuario);
+        PostInfo other = (PostInfo) obj;
+        return Objects.equals(id, other.id);
     }
 }

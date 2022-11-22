@@ -40,10 +40,12 @@ public class ComentarioDTO implements Serializable {
      * @param juego            the juego
      */
     public ComentarioDTO(
+        Long id,
         String comentario,
         String usuario,
         Long post,
         Long juego) {
+        this.id = id;
         this.comentario = comentario;
         this.usuario = usuario;
         this.post = post;
