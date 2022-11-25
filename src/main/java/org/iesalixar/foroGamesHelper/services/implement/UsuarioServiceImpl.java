@@ -44,7 +44,7 @@ public class UsuarioServiceImpl implements UsuarioService {
      */
     @Override
     public Boolean updateUsuario(Usuario usuario) {
-        if (getUsuario(usuario.getUserName()) != null) {
+        if (getUsuario(usuario.getUsuario()) != null) {
             Usuario userUpdate = userRepo.save(usuario);
             if (userUpdate.getId() != null) {
                 return true;
@@ -66,6 +66,23 @@ public class UsuarioServiceImpl implements UsuarioService {
         Usuario user = getUsuario(usuario);
         if (user.getId() != null) {
             user.setActivo(false);
+            return updateUsuario(user);
+        }
+        return false;
+    }
+
+    /**
+     * Active usuario.
+     *
+     * @param usuario
+     *            the usuario
+     * @return the boolean
+     */
+    @Override
+    public Boolean activeUsuario(String usuario) {
+        Usuario user = getUsuario(usuario);
+        if (user.getId() != null) {
+            user.setActivo(true);
             return updateUsuario(user);
         }
         return false;
@@ -110,7 +127,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     public List<Usuario> getAllUsers() {
         return userRepo.findAll();
     }
-    
+
     @Override
     public Boolean login(String usuario, String password) {
         Usuario user = getUsuario(usuario);
@@ -122,6 +139,4 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
         return false;
     }
-    
-    
 }

@@ -23,7 +23,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -56,8 +59,9 @@ public class PostController {
      *            the id juego
      * @return the response entity
      */
-    @PostMapping("/Post")
-    public ResponseEntity<?> addPost(PostDTO post, String usuario, Long idJuego) {
+    @PostMapping("/Post/add")
+    public ResponseEntity<?> addPost(@RequestBody PostDTO post, @RequestParam String usuario,
+        @RequestParam Long idJuego) {
         Post postBD = new Post();
         postBD.setTitulo(post.getTitulo());
         postBD.setContenido(post.getContenido());
@@ -92,8 +96,8 @@ public class PostController {
      * @return the response entity
      */
     @SuppressWarnings("unused")
-    @DeleteMapping("/Post")
-    public ResponseEntity<?> deletePost(Long idPost, String usuario) {
+    @DeleteMapping("/Post/{idPost}")
+    public ResponseEntity<?> deletePost(@PathVariable Long idPost, @RequestParam String usuario) {
         Post postBD = postService.getPost(idPost);
         String tituloPost = postBD.getTitulo();
         String nombreJuego = postBD.getJuego().getNombre();
@@ -127,7 +131,7 @@ public class PostController {
      * @return the response entity
      */
     @PatchMapping("/Post")
-    public ResponseEntity<?> updatePost(PostDTO postModified, String usuario) {
+    public ResponseEntity<?> updatePost(@RequestBody PostDTO postModified, @RequestParam String usuario) {
         Post post = postService.getPost(postModified.getId());
         Usuario user = userService.getUsuario(usuario);
         if (user.getUsuario().equals(post.getUsuario().getUsuario())) {
@@ -154,7 +158,7 @@ public class PostController {
      * @return the all posts
      */
     @GetMapping("/AllPost")
-    public ResponseEntity<?> getAllPosts(Long idJuego) {
+    public ResponseEntity<?> getAllPosts(@RequestParam Long idJuego) {
         List<Post> listaPost = postService.getAllPosts();
         if (idJuego == null) {
             listaPost = listaPost.stream().sorted(Comparator.comparing(Post::getFechaCreacion))
@@ -173,8 +177,8 @@ public class PostController {
      *            the id post
      * @return the post
      */
-    @GetMapping("/Post")
-    public ResponseEntity<?> getPost(Long idPost) {
+    @GetMapping("/Post/{idPost}")
+    public ResponseEntity<?> getPost(@PathVariable Long idPost) {
         if (idPost != null) {
             Post post = postService.getPost(idPost);
             return new ResponseEntity<PostInfo>(GameMapper.mapToPostInfo(post), HttpStatus.OK);

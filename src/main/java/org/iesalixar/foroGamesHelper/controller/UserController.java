@@ -11,7 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -60,5 +63,31 @@ public class UserController {
             user.setPassword(null);
             return new ResponseEntity<Usuario>(user, HttpStatus.OK);
         }
+    }
+    
+    @DeleteMapping("unsuscribe/{usuario}")
+    public ResponseEntity<?> deleteUsuario(@PathVariable String usuario) {
+        if(usuarioService.deleteUsuario(usuario)) {
+            return new ResponseEntity<String>("Usuario bloqueado correctamente",
+                HttpStatus.OK);
+        }
+        return new ResponseEntity<String>("No se ha encontrado al usuario que se desea eliminar",
+            HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    
+    @PatchMapping("suscribe/{usuario}")
+    public ResponseEntity<?> activeUsuario(@PathVariable String usuario) {
+        if(usuarioService.activeUsuario(usuario)) {
+            return new ResponseEntity<String>("Usuario activado correctamente",
+                HttpStatus.OK);
+        }
+        return new ResponseEntity<String>("No se ha encontrado al usuario que se desea activar",
+            HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    
+    @PostMapping("update/{usuario}")
+    public ResponseEntity<?> updateUsuario(@RequestBody UsuarioDTO usuarioDTO,@PathVariable String usuario) {
+        return new ResponseEntity<String>("No se ha encontrado al usuario que se desea actualizar",
+            HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

@@ -1,17 +1,12 @@
 package org.iesalixar.foroGamesHelper.dto;
 
-import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 /**
- * The Class JuegoDTO.
+ * The Class JuegoInfo.
  */
-public class JuegoDTO implements Serializable {
-
-    /** serial. */
-    private static final long serialVersionUID = 1L;
+public class JuegoInfo {
 
     /** The id. */
     private Long id;
@@ -30,22 +25,25 @@ public class JuegoDTO implements Serializable {
 
     /** The anio salida. */
     private LocalDate anioSalida;
-    
-    private List<PostInfo> listPosts;
-    
-    private List<ComentarioDTO> listComentarios;
+
+    /** The num post. */
+    private int numPost;
+
+    /** The num comentarios. */
+    private int numComentarios;
 
     /**
-     * Instantiates a new juego DTO.
+     * Instantiates a new juego info.
      */
-    public JuegoDTO() {
-        this.setListPosts(new ArrayList<>());
-        setListComentarios(new ArrayList<>());
-    }
+    public JuegoInfo() {
+        super();
+    };
 
     /**
-     * Instantiates a new juego DTO.
+     * Instantiates a new juego info.
      *
+     * @param id
+     *            the id
      * @param nombre
      *            the nombre
      * @param compania
@@ -56,39 +54,29 @@ public class JuegoDTO implements Serializable {
      *            the coop
      * @param anioSalida
      *            the anio salida
+     * @param numPost
+     *            the num post
+     * @param numComentarios
+     *            the num comentarios
      */
-    public JuegoDTO(
-        String nombre,
-        String compania,
-        String genero,
-        boolean coop,
-        LocalDate anioSalida) {
-        this.nombre = nombre;
-        this.compania = compania;
-        this.genero = genero;
-        this.coop = coop;
-        this.anioSalida = anioSalida;
-        this.setListPosts(new ArrayList<>());
-        setListComentarios(new ArrayList<>());
-    }
-    
-    public JuegoDTO(
+    public JuegoInfo(
         Long id,
         String nombre,
         String compania,
         String genero,
         boolean coop,
         LocalDate anioSalida,
-        List<PostInfo> listPosts,
-        List<ComentarioDTO> listComentarios) {
+        int numPost,
+        int numComentarios) {
+        super();
         this.id = id;
         this.nombre = nombre;
         this.compania = compania;
         this.genero = genero;
         this.coop = coop;
         this.anioSalida = anioSalida;
-        this.setListPosts(listPosts);
-        this.setListComentarios(listComentarios);
+        this.numPost = numPost;
+        this.numComentarios = numComentarios;
     }
 
     /**
@@ -205,19 +193,70 @@ public class JuegoDTO implements Serializable {
         this.anioSalida = anioSalida;
     }
 
-    public List<PostInfo> getListPosts() {
-        return listPosts;
+    /**
+     * Gets the num post.
+     *
+     * @return the num post
+     */
+    public int getNumPost() {
+        return numPost;
     }
 
-    public void setListPosts(List<PostInfo> listPosts) {
-        this.listPosts = listPosts;
+    /**
+     * Sets the num post.
+     *
+     * @param numPost
+     *            the new num post
+     */
+    public void setNumPost(int numPost) {
+        this.numPost = numPost;
     }
 
-    public List<ComentarioDTO> getListComentarios() {
-        return listComentarios;
+    /**
+     * Gets the num comentarios.
+     *
+     * @return the num comentarios
+     */
+    public int getNumComentarios() {
+        return numComentarios;
     }
 
-    public void setListComentarios(List<ComentarioDTO> listComentarios) {
-        this.listComentarios = listComentarios;
+    /**
+     * Sets the num comentarios.
+     *
+     * @param numComentarios
+     *            the new num comentarios
+     */
+    public void setNumComentarios(int numComentarios) {
+        this.numComentarios = numComentarios;
+    }
+
+    /**
+     * Hash code.
+     *
+     * @return the int
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    /**
+     * Equals.
+     *
+     * @param obj
+     *            the obj
+     * @return true, if successful
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        JuegoInfo other = (JuegoInfo) obj;
+        return Objects.equals(id, other.id);
     }
 }

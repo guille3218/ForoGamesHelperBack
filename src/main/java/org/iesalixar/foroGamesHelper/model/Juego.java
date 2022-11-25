@@ -105,6 +105,28 @@ public class Juego implements Serializable {
         this.posts = posts;
         this.comentarios = comentarios;
     }
+    
+    /**
+     * Instantiates a new juego.
+     *
+     * @param nombre the nombre
+     * @param compania the compania
+     * @param genero the genero
+     * @param coop the coop
+     * @param anioSalida the anio salida
+     */
+    public Juego(
+        String nombre,
+        String compania,
+        String genero,
+        boolean coop,
+        LocalDate anioSalida) {
+        this.nombre = nombre;
+        this.compania = compania;
+        this.genero = genero;
+        this.coop = coop;
+        this.anioSalida = anioSalida;
+    }
     // HELPERS
 
     /**
