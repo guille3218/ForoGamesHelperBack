@@ -128,6 +128,45 @@ public class Usuario implements Serializable {
         this.comentarios = comentarios;
     }
 
+    /**
+     * Instantiates a new usuario.
+     *
+     * @param id
+     *            the id
+     * @param usuario
+     *            the usuario
+     * @param password
+     *            the password
+     * @param email
+     *            the email
+     * @param nombre
+     *            the nombre
+     * @param apellidos
+     *            the apellidos
+     * @param role
+     *            the role
+     * @param activo
+     *            the activo
+     */
+    public Usuario(
+        Long id,
+        String usuario,
+        String password,
+        String email,
+        String nombre,
+        String apellidos,
+        String role,
+        boolean activo) {
+        this.id = id;
+        this.usuario = usuario;
+        this.password = password;
+        this.email = email;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.role = role;
+        this.activo = activo;
+    }
+
     // HELPERS
     /**
      * Adds the post.

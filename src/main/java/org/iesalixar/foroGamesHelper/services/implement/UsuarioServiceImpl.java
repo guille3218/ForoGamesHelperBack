@@ -1,8 +1,9 @@
 package org.iesalixar.foroGamesHelper.services.implement;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.iesalixar.foroGamesHelper.mapper.GameMapper;
 import org.iesalixar.foroGamesHelper.model.Usuario;
 import org.iesalixar.foroGamesHelper.repository.UsuarioRepository;
 import org.iesalixar.foroGamesHelper.services.UsuarioService;
@@ -43,9 +44,14 @@ public class UsuarioServiceImpl implements UsuarioService {
      * @return the boolean
      */
     @Override
-    public Boolean updateUsuario(Usuario usuario) {
-        if (getUsuario(usuario.getUsuario()) != null) {
-            Usuario userUpdate = userRepo.save(usuario);
+    public Boolean updateUsuario(Usuario usuario, String usuarioAnterior) {
+        Usuario user = getUsuario(usuarioAnterior);
+        if (user != null) {
+            Usuario userEmail = getUsuarioByEmail(usuario.getEmail());
+            if(userEmail != null) {
+                usuario.setEmail(user.getEmail());
+            }
+            Usuario userUpdate = userRepo.save(GameMapper.mapToUsuarioUpdate(user, usuario));
             if (userUpdate.getId() != null) {
                 return true;
             }
@@ -64,9 +70,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public Boolean deleteUsuario(String usuario) {
         Usuario user = getUsuario(usuario);
-        if (user.getId() != null) {
+        if (user.getId() != null && user != null) {
             user.setActivo(false);
-            return updateUsuario(user);
+            return updateUsuario(user, user.getUsuario());
         }
         return false;
     }
@@ -81,9 +87,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public Boolean activeUsuario(String usuario) {
         Usuario user = getUsuario(usuario);
-        if (user.getId() != null) {
+        if (user != null && user.getId() != null) {
             user.setActivo(true);
-            return updateUsuario(user);
+            return updateUsuario(user, user.getUsuario());
         }
         return false;
     }
@@ -129,10 +135,16 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
+    public List<Usuario> getAllUsers(boolean activo) {
+        return userRepo.findAll().stream().filter((Usuario user) -> user.isActivo() == activo)
+            .collect(Collectors.toList());
+    }
+
+    @Override
     public Boolean login(String usuario, String password) {
         Usuario user = getUsuario(usuario);
-        if (usuario != null) {
-            boolean match = new BCryptPasswordEncoder(15).matches(user.getPassword(), password);
+        if (user != null) {
+            boolean match = new BCryptPasswordEncoder(15).matches(password, user.getPassword());
             if (match) {
                 return true;
             }

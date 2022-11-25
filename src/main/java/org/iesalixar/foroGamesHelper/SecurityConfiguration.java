@@ -7,13 +7,15 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 @Configuration
-@EnableWebSecurity
+//@EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity security) throws Exception {
-		security.httpBasic().disable()
-		.csrf().disable();
+//		security.httpBasic().disable()
+//		.csrf().disable();
+		security.csrf().disable().authorizeRequests().antMatchers("/","/**").not().authenticated().anyRequest()
+            .authenticated().and().httpBasic();
 	}
 
 }

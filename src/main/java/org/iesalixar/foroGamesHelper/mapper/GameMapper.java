@@ -9,9 +9,12 @@ import org.iesalixar.foroGamesHelper.dto.JuegoDTO;
 import org.iesalixar.foroGamesHelper.dto.JuegoInfo;
 import org.iesalixar.foroGamesHelper.dto.PostDTO;
 import org.iesalixar.foroGamesHelper.dto.PostInfo;
+import org.iesalixar.foroGamesHelper.dto.UsuarioDTO;
 import org.iesalixar.foroGamesHelper.model.Comentario;
 import org.iesalixar.foroGamesHelper.model.Juego;
 import org.iesalixar.foroGamesHelper.model.Post;
+import org.iesalixar.foroGamesHelper.model.Usuario;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * The Class GameMapper.
@@ -120,5 +123,21 @@ public class GameMapper {
         return new JuegoDTO(juego.getId(), juego.getNombre(), juego.getCompania(), juego.getGenero(),
             juego.isCoop(), juego.getAnioSalida(), mapToListPostInfo(new ArrayList<>(juego.getPosts())),
             mapToListComentarioDTO(new ArrayList<>(juego.getComentarios())));
+    }
+    
+    public static Usuario mapToUsuario(UsuarioDTO usuario) {
+        String password = new BCryptPasswordEncoder(15).encode(usuario.getPassword());
+        return new Usuario(usuario.getId(), usuario.getUsuario(), password, usuario.getEmail(),
+            usuario.getNombre(), usuario.getApellidos(), usuario.getRole(), usuario.isActivo());
+    }
+    
+    public static Usuario mapToUsuarioUpdate(Usuario usuarioAnterior, Usuario usuarioActualizado) {
+        usuarioAnterior.setUsuario(usuarioActualizado.getUsuario());
+        usuarioAnterior.setPassword(usuarioActualizado.getPassword());
+        usuarioAnterior.setEmail(usuarioActualizado.getEmail());
+        usuarioAnterior.setNombre(usuarioActualizado.getNombre());
+        usuarioAnterior.setApellidos(usuarioActualizado.getApellidos());
+        usuarioAnterior.setRole(usuarioActualizado.getRole());
+        return usuarioAnterior;
     }
 }

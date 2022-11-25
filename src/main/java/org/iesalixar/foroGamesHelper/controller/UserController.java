@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.iesalixar.foroGamesHelper.constant.RolEnum;
 import org.iesalixar.foroGamesHelper.dto.UsuarioDTO;
+import org.iesalixar.foroGamesHelper.mapper.GameMapper;
 import org.iesalixar.foroGamesHelper.model.Usuario;
 import org.iesalixar.foroGamesHelper.services.implement.UsuarioServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -34,6 +36,7 @@ public class UserController {
         userBD.setApellidos(usuario.getApellidos());
         userBD.setUsuario(usuario.getUsuario());
         userBD.setEmail(usuario.getEmail());
+        userBD.setActivo(true);
         userBD.setPassword(new BCryptPasswordEncoder(15).encode(usuario.getPassword()));
         Usuario user = usuarioService.getUsuario(usuario.getUsuario());
         Usuario user2 = usuarioService.getUsuarioByEmail(usuario.getEmail());
@@ -43,50 +46,68 @@ public class UserController {
         if (user2 != null) {
             return new ResponseEntity<String>("Email ya registrado.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        System.out.println(userBD);
         userBD = usuarioService.insertUsuario(userBD);
         return new ResponseEntity<Usuario>(userBD, HttpStatus.OK);
     }
 
     @GetMapping("/usuarios")
-    public List<Usuario> obtenerUsuarios() {
+    public List<Usuario> obtenerUsuarios(@RequestParam(required = false) Boolean activo) {
+        if (activo != null) {
+            return usuarioService.getAllUsers(activo.booleanValue());
+        }
         return usuarioService.getAllUsers();
     }
 
     @GetMapping("/login")
     public ResponseEntity<?> getUsuarioLogin(@RequestBody UsuarioDTO usuario) {
-        Boolean isUserLogin = usuarioService.login(usuario.getUsuario(), usuario.getPassword());
-        if (!isUserLogin) {
-            return new ResponseEntity<String>("El usuario o las credenciales son incorrectas.",
-                HttpStatus.INTERNAL_SERVER_ERROR);
-        } else {
-            Usuario user = usuarioService.getUsuario(usuario.getUsuario());
-            user.setPassword(null);
-            return new ResponseEntity<Usuario>(user, HttpStatus.OK);
+        if (usuario.getUsuario() != null && usuario.getPassword() != null) {
+            Boolean isUserLogin = usuarioService.login(usuario.getUsuario(), usuario.getPassword());
+            if (!isUserLogin) {
+                return new ResponseEntity<String>("El usuario o las credenciales son incorrectas.",
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+            } else {
+                Usuario user = usuarioService.getUsuario(usuario.getUsuario());
+                user.setPassword(null);
+                return new ResponseEntity<Usuario>(user, HttpStatus.OK);
+            }
         }
+        return new ResponseEntity<String>("No se han informado de los datos de acceso",
+            HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    
-    @DeleteMapping("unsuscribe/{usuario}")
+
+    @DeleteMapping("/unsuscribe/{usuario}")
     public ResponseEntity<?> deleteUsuario(@PathVariable String usuario) {
-        if(usuarioService.deleteUsuario(usuario)) {
-            return new ResponseEntity<String>("Usuario bloqueado correctamente",
-                HttpStatus.OK);
+        if (usuarioService.deleteUsuario(usuario)) {
+            return new ResponseEntity<String>("Usuario bloqueado correctamente", HttpStatus.OK);
         }
         return new ResponseEntity<String>("No se ha encontrado al usuario que se desea eliminar",
             HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    
-    @PatchMapping("suscribe/{usuario}")
+
+    @PatchMapping("/suscribe/{usuario}")
     public ResponseEntity<?> activeUsuario(@PathVariable String usuario) {
-        if(usuarioService.activeUsuario(usuario)) {
-            return new ResponseEntity<String>("Usuario activado correctamente",
-                HttpStatus.OK);
+        if (usuario != null) {
+            if (usuarioService.activeUsuario(usuario)) {
+                return new ResponseEntity<String>("Usuario activado correctamente", HttpStatus.OK);
+            }
+            return new ResponseEntity<String>("No se ha encontrado al usuario que se desea activar",
+                HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<String>("No se ha encontrado al usuario que se desea activar",
             HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    
-    @PostMapping("update/{usuario}")
-    public ResponseEntity<?> updateUsuario(@RequestBody UsuarioDTO usuarioDTO,@PathVariable String usuario) {
+
+    @PostMapping("/update/{usuario}")
+    public ResponseEntity<?> updateUsuario(@RequestBody UsuarioDTO usuarioDTO, @PathVariable String usuario) {
+        Usuario user = usuarioService.getUsuario(usuario);
+        if (user != null) {
+            return new ResponseEntity<String>(
+                usuarioService.updateUsuario(GameMapper.mapToUsuario(usuarioDTO), usuario)
+                    ? "Usuario actualizado correctamente"
+                    : "Fallo al actualizar el usuario",
+                HttpStatus.OK);
+        }
         return new ResponseEntity<String>("No se ha encontrado al usuario que se desea actualizar",
             HttpStatus.INTERNAL_SERVER_ERROR);
     }

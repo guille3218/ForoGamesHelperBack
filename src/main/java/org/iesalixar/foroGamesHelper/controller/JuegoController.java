@@ -66,7 +66,16 @@ public class JuegoController {
     
     @DeleteMapping("/Juego/{idJuego}")
     public ResponseEntity<?> deleteJuego(@PathVariable Long idJuego){
-        
+        if(idJuego != null) {
+            Juego juego = juegoService.getJuego(idJuego);
+            if (juego != null) {
+                juegoService.deleteJuego(juego);
+                return new ResponseEntity<String>("Juego borrado correctamente", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<String>("No se ha encontrado el juego que busca",
+                    HttpStatus.BAD_REQUEST);
+            }
+        }
         return new ResponseEntity<String>("No se ha informado del juego que desea eliminar",
             HttpStatus.BAD_REQUEST);
     }

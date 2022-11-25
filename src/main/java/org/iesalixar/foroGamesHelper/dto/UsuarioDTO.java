@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.iesalixar.foroGamesHelper.model.ComentarioDTO;
 import org.iesalixar.foroGamesHelper.model.Post;
 
 /**

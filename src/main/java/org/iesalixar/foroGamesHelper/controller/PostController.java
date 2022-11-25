@@ -107,7 +107,7 @@ public class PostController {
                 || user.getRole() != RolEnum.USER.name()) {
                 Usuario userRemovePost = postBD.getUsuario();
                 userRemovePost.eliminarPost(postBD);
-                userService.updateUsuario(userRemovePost);
+                userService.updateUsuario(userRemovePost, userRemovePost.getUsuario());
                 return new ResponseEntity<String>("Se ha eliminado correctamente el post '" + tituloPost
                     + "' sobre el juego '" + nombreJuego + "'", HttpStatus.OK);
             } else {
