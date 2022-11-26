@@ -15,5 +15,6 @@ public interface JuegoService {
     public boolean createJuego(Juego juego);
     public boolean deleteJuego(Juego juego);
     public List<JuegoInfo> getJuegosInfo();
+    public Juego getJuego(String nombre);
     
 }

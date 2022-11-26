@@ -55,6 +55,11 @@ public class JuegoServiceImpl implements JuegoService {
         List<Juego> listJuegos = gameRepo.findAll();
         return GameMapper.mapToListJuegoInfo(listJuegos);
     }
+
+    @Override
+    public Juego getJuego(String nombre) {
+        return gameRepo.findByNombre(nombre).stream().findFirst().orElse(null);
+    }
     
     
 }

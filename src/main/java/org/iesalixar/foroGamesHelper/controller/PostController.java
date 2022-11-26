@@ -59,7 +59,7 @@ public class PostController {
      *            the id juego
      * @return the response entity
      */
-    @PostMapping("/Post/add")
+    @PostMapping("/post/add")
     public ResponseEntity<?> addPost(@RequestBody PostDTO post, @RequestParam String usuario,
         @RequestParam Long idJuego) {
         Post postBD = new Post();
@@ -72,14 +72,15 @@ public class PostController {
             Usuario user = userService.getUsuario(usuario);
             if (user != null) {
                 user.realizarPost(postBD);
+                userService.updateUsuario(user, user.getUsuario());
                 return new ResponseEntity<String>(
-                    "No ha iniciado sesion. Inicia Sesion para hacer un post sobre el juego '"
-                        + juego.getNombre() + "'",
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+                    "Se ha publicado correctamente el post sobre el juego '" + juego.getNombre() + "'",
+                    HttpStatus.OK);
             }
             return new ResponseEntity<String>(
-                "Se ha publicado correctamente el post sobre el juego '" + juego.getNombre() + "'",
-                HttpStatus.OK);
+                "No ha iniciado sesion. Inicia Sesion para hacer un post sobre el juego '"
+                    + juego.getNombre() + "'",
+                HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
             return new ResponseEntity<String>("El juego seleccionado no está en nuestro sistema",
                 HttpStatus.INTERNAL_SERVER_ERROR);
@@ -96,7 +97,7 @@ public class PostController {
      * @return the response entity
      */
     @SuppressWarnings("unused")
-    @DeleteMapping("/Post/{idPost}")
+    @DeleteMapping("/post/{idPost}")
     public ResponseEntity<?> deletePost(@PathVariable Long idPost, @RequestParam String usuario) {
         Post postBD = postService.getPost(idPost);
         String tituloPost = postBD.getTitulo();
@@ -130,7 +131,7 @@ public class PostController {
      *            the usuario
      * @return the response entity
      */
-    @PatchMapping("/Post")
+    @PatchMapping("/post")
     public ResponseEntity<?> updatePost(@RequestBody PostDTO postModified, @RequestParam String usuario) {
         Post post = postService.getPost(postModified.getId());
         Usuario user = userService.getUsuario(usuario);
@@ -157,7 +158,7 @@ public class PostController {
      *            the id juego
      * @return the all posts
      */
-    @GetMapping("/AllPost")
+    @GetMapping("/allPost")
     public ResponseEntity<?> getAllPosts(@RequestParam Long idJuego) {
         List<Post> listaPost = postService.getAllPosts();
         if (idJuego == null) {
@@ -177,7 +178,7 @@ public class PostController {
      *            the id post
      * @return the post
      */
-    @GetMapping("/Post/{idPost}")
+    @GetMapping("/post/{idPost}")
     public ResponseEntity<?> getPost(@PathVariable Long idPost) {
         if (idPost != null) {
             Post post = postService.getPost(idPost);

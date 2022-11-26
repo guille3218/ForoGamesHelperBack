@@ -32,7 +32,7 @@ public class Juego implements Serializable {
     private Long id;
 
     /** The nombre. */
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String nombre;
 
     /** The compania. */

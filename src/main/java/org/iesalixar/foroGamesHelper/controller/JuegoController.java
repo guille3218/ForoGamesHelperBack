@@ -30,26 +30,33 @@ public class JuegoController {
     @Autowired
     UsuarioServiceImpl userService;
 
-    @PostMapping("/Juego")
+    @PostMapping("/juego/add")
     public ResponseEntity<?> addJuego(@RequestBody JuegoDTO juegoDTO, @RequestParam String usuario) {
         if (usuario != null) {
             Usuario user = userService.getUsuario(usuario);
-            if (user != null) {
-                Juego juego = new Juego(juegoDTO.getNombre(), juegoDTO.getCompania(), juegoDTO.getGenero(),
-                    juegoDTO.isCoop(), juegoDTO.getAnioSalida());
-                if (juegoService.createJuego(juego)) {
-                    return new ResponseEntity<String>("Juego creado correctamente", HttpStatus.OK);
+            Juego juegoDB = juegoService.getJuego(juegoDTO.getNombre());
+            if (juegoDB == null) {
+                if (user != null) {
+                    Juego juego = new Juego(juegoDTO.getNombre(), juegoDTO.getCompania(), juegoDTO.getGenero(),
+                        juegoDTO.isCoop(), juegoDTO.getAnioSalida());
+                    if (juegoService.createJuego(juego)) {
+                        return new ResponseEntity<String>("Juego creado correctamente", HttpStatus.OK);
+                    }
+                    return new ResponseEntity<String>("Hubo un problema al crear el juego",
+                        HttpStatus.INTERNAL_SERVER_ERROR);
                 }
-                return new ResponseEntity<String>("Hubo un problema al crear el juego", HttpStatus.OK);
+            }else {
+                return new ResponseEntity<String>("Ya estaba registrado este juego",
+                    HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } else {
             return new ResponseEntity<String>("No ha iniciado sesion. Inicia Sesion para añadir un juego",
                 HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<String>("La solicitud no la realiza un usuario", HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("/Juego/{idJuego}")
+    @GetMapping("/juego/{idJuego}")
     public ResponseEntity<?> getJuego(@PathVariable Long idJuego) {
         if (idJuego != null) {
             Juego juego = juegoService.getJuego(idJuego);
@@ -63,17 +70,17 @@ public class JuegoController {
         return new ResponseEntity<String>("No se ha informado del juego que desea buscar",
             HttpStatus.BAD_REQUEST);
     }
-    
-    @DeleteMapping("/Juego/{idJuego}")
-    public ResponseEntity<?> deleteJuego(@PathVariable Long idJuego){
-        if(idJuego != null) {
+
+    @DeleteMapping("/juego/{idJuego}")
+    public ResponseEntity<?> deleteJuego(@PathVariable Long idJuego) {
+        if (idJuego != null) {
             Juego juego = juegoService.getJuego(idJuego);
             if (juego != null) {
                 juegoService.deleteJuego(juego);
                 return new ResponseEntity<String>("Juego borrado correctamente", HttpStatus.OK);
             } else {
                 return new ResponseEntity<String>("No se ha encontrado el juego que busca",
-                    HttpStatus.BAD_REQUEST);
+                    HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
         return new ResponseEntity<String>("No se ha informado del juego que desea eliminar",
